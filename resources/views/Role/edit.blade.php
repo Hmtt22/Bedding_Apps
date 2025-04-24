@@ -65,7 +65,7 @@
             <label for="description" class="form-label">Deskripsi</label>
             <textarea class="form-control" id="description" name="description" rows="3" placeholder="Masukkan deskripsi...">{{ old('description', $role->description) }}</textarea>
           </div>
-
+ xxxx
         <div class="form-footer">
           <a href="{{ route('roles.index') }}" class="btn btn-danger">Kembali</a>
           <button type="submit" class="btn btn-success">Update Role</button>

@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('beds', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('registrasi_number'); //kolo registrasi number
+            $table->string('brand'); //kolom untuk brand
             $table->string('description');
             $table->timestamps();
             $table->softDeletes(); // Menambahkan kolom deleted_at

@@ -45,17 +45,17 @@
           @csrf
           <div class="mb-3">
             <label for="role" class="form-label">Role Name</label>
-            <input type="text" class="form-control" id="role" name="role" placeholder="Enter role name" required>
+            <input type="text" class="form-control" id="role" name="role"  required>
           </div>
 
           <div class="mb-3">
-            <label for="description" class="form-label">Deskripsi</label>
-            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Masukkan deskripsi role..."></textarea>
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" ></textarea>
           </div>
 
           <div class="btn-container">
-            <a href="{{ route('roles.index') }}" class="btn btn-danger">Kembali</a>
-            <button type="submit" class="btn btn-success">Simpan Role</button>
+            <a href="{{ route('roles.index') }}" class="btn btn-danger">Back</a>
+            <button type="submit" class="btn btn-success">Submit</button>
           </div>
         </form>
       </div>

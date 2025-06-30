@@ -94,6 +94,10 @@
 <!-- [Template CSS Files] -->
 <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" >
 <link rel="stylesheet" href="../assets/css/style-preset.css" >
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>$('#myTable').DataTable();</script>
 
 </head>
 <!-- [Head] end -->
@@ -148,44 +152,53 @@
   </div>
   <!-- [ Create Building Button ] end -->
 
-  <div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
+  <div class="container">
+    <div class="card mt-5">
+        <h3 class="card-header p-3"></h3>
+        <div class="card-body">
+            <table id="myTable"class="display">
+<thead>
+        <tr>
+            <th>ID</th>
+            <th>Building Name</th>
+            <th>Room Name</th>
+            <th>Bed Name</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($settingBeds as $settingBed)
             <tr>
-                <th>No</th>
-                <th>Nama Gedung</th>
-                <th>Nama Ruangan</th>
-                <th>Nama kasur</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($settingBeds as $settingBed)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $settingBed->building ? $settingBed->building->name : 'No Building' }}</td>
-<td>{{ $settingBed->room ? $settingBed->room->name : 'No Room' }}</td>
-<td>{{ $settingBed->bed ? $settingBed->bed->name : 'No Bed' }}</td>
+                <td>{{ ($settingBeds->currentPage() - 1) * $settingBeds->perPage() + $loop->iteration }}</td>
+                <td>{{ $settingBed->building ? $settingBed->building->name : 'No Building' }}</td>
+                <td>{{ $settingBed->room ? $settingBed->room->name : 'No Room' }}</td>
+                <td>{{ $settingBed->bed ? $settingBed->bed->name : 'No Bed' }}</td>
 
-                    <td>
-                        <!-- Tombol Edit -->
-                        <a href="{{ route('setting_beds.edit', $settingBed->id) }}" class="btn btn-warning btn-sm edit-btn">
-                            <i class="fas fa-pen"></i> <!-- Ikon Pena -->
-                        </a>
+                <td>
+                    <!-- Tombol Edit -->
+                    <a href="{{ route('setting_beds.edit', $settingBed->id) }}" class="btn btn-warning btn-sm edit-btn">
+                        <i class="fas fa-pen"></i> <!-- Ikon Pena -->
+                    </a>
 
-                        <!-- Tombol Hapus -->
-                        <form action="{{ route('setting_beds.destroy', $settingBed->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm delete-btn">
-                                <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
-                            </button>
-                        </form>
-                    </td>
-                    </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    <!-- Tombol Hapus -->
+                    <form action="{{ route('setting_beds.destroy', $settingBed->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data setting bed ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm delete-btn">
+                            <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
+                        </button>
+                    </form>
+                </td>
+                </tr>
+        @endforeach
+    </tbody>
+            </table>
+                <!-- Pagination -->
+                    <div class="d-flex justify-content-end mt-3">
+                        {{ $settingBeds->links() }}
+                    </div>
+        </div>
+    </div>
 </div>
   <!-- [ Main Content ] end -->
 
@@ -210,8 +223,25 @@
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
-
-
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    $('#myTable').DataTable({
+      language: {
+        search: "🔍 Search:",
+        lengthMenu: " _MENU_ entries per page",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        paginate: {
+          previous: "Previous",
+          next: "Next"
+        },
+        zeroRecords: "Not data found"
+      }
+    });
+  });
+</script>
 
 
 

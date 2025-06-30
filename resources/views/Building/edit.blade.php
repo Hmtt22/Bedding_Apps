@@ -77,36 +77,36 @@
                 @method('PUT')
 
                 <div class="row mb-3">
-                    <label for="name" class="col-md-3 col-form-label">Nama Gedung</label>
+                    <label for="name" class="col-md-3 col-form-label">Building Name</label>
                     <div class="col-md-9">
                         <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $building->name) }}" required>
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label for="address" class="col-md-3 col-form-label">Alamat</label>
+                    <label for="address" class="col-md-3 col-form-label">Address</label>
                     <div class="col-md-9">
                         <input type="text" class="form-control" id="address" name="address" value="{{ old('address', $building->address) }}" required>
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label for="description" class="col-md-3 col-form-label">Deskripsi</label>
+                    <label for="description" class="col-md-3 col-form-label">Description</label>
                     <div class="col-md-9">
                         <textarea class="form-control" id="description" name="description" rows="4" required>{{ old('description', $building->description) }}</textarea>
                     </div>
                 </div>
 
                 <div class="row mb-3">
-                    <label for="jumlah_lantai" class="col-md-3 col-form-label">Jumlah Lantai</label>
+                    <label for="jumlah_lantai" class="col-md-3 col-form-label">Floors</label>
                     <div class="col-md-9">
                         <input type="number" class="form-control" id="jumlah_lantai" name="jumlah_lantai" value="{{ old('jumlah_lantai', $building->jumlah_lantai) }}" required>
                     </div>
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ route('buildings.index') }}" class="btn btn-danger">Kembali</a>
-                    <button type="submit" class="btn btn-success">Update Building</button>
+                    <a href="{{ route('buildings.index') }}" class="btn btn-danger">Back</a>
+                    <button type="submit" class="btn btn-success">Update</button>
                 </div>
             </form>
         </div>

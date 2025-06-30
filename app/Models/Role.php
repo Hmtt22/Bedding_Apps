@@ -17,10 +17,15 @@ class Role extends Model
         'description'
     ]; // Kolom yang bisa diisi secara massal
 
-    public function users()
-{
-    return $this->belongsToMany(User::class, 'user_x_role');
-}
+//     public function users()
+// {
+//     return $this->belongsToMany(User::class, 'user_x_role');
+// }
+
+public function userLogins()
+    {
+        return $this->hasMany(UserLogin::class);
+    }
 
 
 }

@@ -73,7 +73,7 @@
                 @method('PUT') <!-- Menandakan bahwa ini adalah metode PUT untuk update -->
 
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nama Akun</label>
+                    <label for="name" class="form-label">Account Name</label>
                     <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $user->name) }}" required>
                 </div>
 
@@ -88,20 +88,20 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="ktp" class="form-label">Nomor KTP</label>
+                    <label for="ktp" class="form-label">KTP Number</label>
                     <input type="text" class="form-control" id="ktp" name="ktp" value="{{ old('ktp', $user->ktp) }}" required>
                 </div>
 
                 <div class="mb-3">
-                    <label for="description" class="form-label">Deskripsi</label>
+                    <label for="description" class="form-label">Description</label>
                     <textarea class="form-control" id="description" name="description" rows="3">{{ old('description', $user->description) }}</textarea>
                 </div>
 
                 <div class="form-footer">
                     <!-- Button to go back to the users index -->
-                    <a href="{{ route('users.index') }}" class="btn btn-danger">Kembali</a>
+                    <a href="{{ route('users.index') }}" class="btn btn-danger">Back</a>
                     <!-- Button to users the building -->
-                    <button type="submit" class="btn btn-success">Update Akun</button>
+                    <button type="submit" class="btn btn-success">Update</button>
                 </div>
             </form>
 

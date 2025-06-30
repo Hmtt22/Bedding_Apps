@@ -3,74 +3,6 @@
 <!-- [Head] start -->
 
 <head>
-    <style>
-        /* Gaya Tombol Hapus */
-.delete-btn {
-    display: inline-flex;
-    align-items: center;
-    background-color: #e74c3c; /* Warna merah untuk tombol hapus */
-    color: white;
-    font-size: 20px; /* Ukuran ikon lebih besar */
-    padding: 10px 16px; /* Padding agar tombol lebih besar */
-    border-radius: 50px; /* Membulatkan tombol */
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-/* Gaya saat hover */
-.delete-btn:hover {
-    background-color: #c0392b; /* Warna lebih gelap saat hover */
-    transform: translateY(-4px); /* Efek terangkat saat hover */
-    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2); /* Bayangan lebih kuat */
-}
-
-/* Efek saat fokus */
-.delete-btn:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(255, 87, 34, 0.8); /* Efek glow saat fokus */
-}
-
-/* Efek pada ikon */
-.delete-btn i {
-    margin-right: 8px; /* Memberikan jarak antara ikon dan batas tombol */
-    font-size: 22px; /* Ukuran ikon lebih besar agar lebih jelas */
-}
-
-/* Gaya Umum Tombol */
-.edit-btn {
-  display: inline-flex;
-  align-items: center;
-  background-color: #f39c12; /* Warna kuning terang */
-  color: white;
-  font-size: 18px;
-  padding: 12px 24px; /* Ukuran padding lebih besar untuk kenyamanan */
-  border-radius: 25px; /* Membulatkan tombol */
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2); /* Bayangan 3D */
-  text-decoration: none; /* Menghilangkan garis bawah */
-  transition: all 0.3s ease; /* Transisi saat hover */
-}
-
-/* Gaya saat hover */
-.edit-btn:hover {
-  background-color: #e67e22; /* Warna lebih gelap saat hover */
-  transform: translateY(-4px); /* Efek tombol terangkat */
-  box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.3); /* Bayangan lebih kuat */
-}
-
-/* Efek pada ikon */
-.edit-btn i {
-  margin-right: 8px; /* Memberikan jarak antara ikon */
-  font-size: 20px; /* Ukuran ikon */
-}
-
-/* Gaya saat fokus */
-.edit-btn:focus {
-  outline: none;
-  box-shadow: 0 0 10px rgba(255, 165, 0, 0.8); /* Efek glow saat fokus */
-}
-
-    </style>
   <title>Aplikasi RS</title>
   <!-- [Meta] -->
   <meta charset="utf-8">
@@ -127,7 +59,7 @@
           <div class="row align-items-center">
             <div class="col-md-12">
               <div class="page-header-title">
-                <h5 class="m-b-10">Create New Bed</h5>
+                <h5 class="m-b-10">Create User Login</h5>
               </div>
               {{-- <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
@@ -142,44 +74,37 @@
 
   <!-- [ Main Content ] start -->
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
+  <div class="card-body">
+    <form action="{{ route('userlogins.store') }}" method="POST" >
+        @csrf
+
+        <div class="form-group">
+            <label for="user_id">Account</label>
+            <select name="user_id" id="user_id" class="form-control" required>
+                <option value="">Choose a Account</option>
+                @foreach ($users as $user)
+                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                @endforeach
+            </select>
         </div>
-    @endif
 
-    <div class="card-body">
-        <form action="{{ route('beds.store') }}" method="POST" >
-            @csrf
+        <div class="form-group">
+            <label for="role_id">Role</label>
+            <select name="role_id" id="role_id" class="form-control" required>
+                <option value="">Choose a Role</option>
+                @foreach ($roles as $role)
+                    <option value="{{ $role->id }}">{{ $role->role }}</option>
+                @endforeach
+            </select>
+        </div>
 
-            <div class="mb-3">
-                <label for="name" class="form-label">Bed Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
+        <div class="btn-container">
+            <a href="{{ route('userlogins.index') }}" class="btn btn-danger">Back</a>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
 
-            <div class="mb-3">
-                <label for="registrasi_number" class="form-label">Registrasi Number</label>
-                <input type="text" class="form-control" id="registrasi_number" name="registrasi_number" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="brand" class="form-label">Brand</label>
-                <input type="text" class="form-control" id="brand" name="brand" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
-            </div>
-
-            <!-- Buttons aligned to the right -->
-            <div class="btn-container">
-                <a href="{{ route('beds.index') }}" class="btn btn-danger">Back</a>
-                <button type="submit" class="btn btn-success">Submit</button>
-            </div>
-
-        </form>
-    </div>
+    </form>
+</div>
 
 
   <!-- [ Main Content ] end -->

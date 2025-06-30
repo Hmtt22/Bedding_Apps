@@ -50,7 +50,7 @@
                   <div class="row align-items-center">
                     <div class="col-md-12">
                       <div class="page-header-title">
-                        <h5 class="m-b-10">Edit Building</h5>
+                        <h5 class="m-b-10">Edit Setting bed</h5>
                       </div>
                       {{-- <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
@@ -73,9 +73,9 @@
                 @method('PUT') <!-- Menandakan bahwa ini adalah metode PUT untuk update -->
 
                 <div class="form-group">
-                    <label for="building_id">Pilih Building</label>
+                    <label for="building_id">Building Name</label>
                     <select name="building_id" id="building_id" class="form-control" required>
-                        <option value="">--Pilih Building--</option>
+                        <option value="">Choose a Building</option>
                         @foreach($buildings as $building)
                             <option value="{{ $building->id }}" {{ $settingBed->building_id == $building->id ? 'selected' : '' }}>
                                 {{ $building->name }}
@@ -85,9 +85,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="room_id">Pilih Room</label>
+                    <label for="room_id">Room Name</label>
                     <select name="room_id" id="room_id" class="form-control" required>
-                        <option value="">--Pilih Room--</option>
+                        <option value="">Choose a Room</option>
                         @foreach($rooms as $room)
                             <option value="{{ $room->id }}" {{ $settingBed->room_id == $room->id ? 'selected' : '' }}>
                                 {{ $room->name }}
@@ -95,9 +95,9 @@
                         @endforeach
                     </select>
                 </div><div class="form-group">
-                <label for="bed_id">Pilih Bed</label>
+                <label for="bed_id">Bed Name</label>
                 <select name="bed_id" id="bed_id" class="form-control" required>
-                    <option value="">--Pilih Bed--</option>
+                    <option value="">Choose a Bed</option>
                     @foreach($beds as $bed)
                         <option value="{{ $bed->id }}" {{ $settingBed->bed_id == $bed->id ? 'selected' : '' }}>
                             {{ $bed->name }}
@@ -109,7 +109,7 @@
 
                 <div class="form-footer">
                     <!-- Button to go back to the building index -->
-                    <a href="{{ route('setting_beds.index') }}" class="btn btn-danger">Kembali</a>
+                    <a href="{{ route('setting_beds.index') }}" class="btn btn-danger">Back</a>
                     <!-- Button to update the building -->
                     <button type="submit" class="btn btn-success">Update</button>
                 </div>

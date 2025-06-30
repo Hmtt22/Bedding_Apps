@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Building</title>
 
-    <link rel="icon" href="{{ asset('assets/images/favicon.ico') }}" type="image/x-icon">
+    <!-- Link to Bootstrap CSS (local asset) -->
+    <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
 
     <!-- [Google Font] Family -->
     <link rel="stylesheet" href="{{ asset('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap') }}" id="main-font-link">
@@ -49,7 +50,7 @@
                   <div class="row align-items-center">
                     <div class="col-md-12">
                       <div class="page-header-title">
-                        <h5 class="m-b-10">Edit Bed</h5>
+                        <h5 class="m-b-10">Edit User Login</h5>
                       </div>
                       {{-- <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
@@ -67,35 +68,32 @@
                 </div>
             @endif
 
-            <form action="{{ route('beds.update', $bed->id) }}" method="POST">
+            <form action="{{ route('userlogins.update', $userLogin->id) }}" method="POST">
                 @csrf
                 @method('PUT') <!-- Menandakan bahwa ini adalah metode PUT untuk update -->
 
-                <div class="mb-3">
-                    <label for="name" class="form-label">Bed Name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $bed->name) }}" required>
+                <div class="form-group">
+                    <label for="user_id">Account</label>
+                    <select name="user_id" id="user_id" class="form-control">
+                        @foreach ($users as $user)
+                            <option value="{{ $user->id }}" {{ $user->id == $userLogin->user_id ? 'selected' : '' }}>{{ $user->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
-                <div class="mb-3">
-                    <label for="registrasi_number" class="form-label">Registrasi Number</label>
-                    <input type="text" class="form-control" id="registrasi_number" name="registrasi_number" value="{{ old('name', $bed->registrasi_number) }}" required>
+                <div class="form-group">
+                    <label for="role_id">Role</label>
+                    <select name="role_id" id="role_id" class="form-control">
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->id }}" {{ $role->id == $userLogin->role_id ? 'selected' : '' }}>{{ $role->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
-
-                <div class="mb-3">
-                    <label for="brand" class="form-label">Brand</label>
-                    <input type="text" class="form-control" id="brand" name="brand" value="{{ old('brand', $bed->brand) }}" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="4" required>{{ old('description', $bed->description) }}</textarea>
-                </div>
-
                 <div class="form-footer">
-                    <!-- Button to go back to the building index -->
-                    <a href="{{ route('beds.index') }}" class="btn btn-danger">Back</a>
-                    <!-- Button to update the building -->
-                    <button type="submit" class="btn btn-success">Update</button>
+                    <!-- Button to go back to the users index -->
+                    <a href="{{ route('userlogins.index') }}" class="btn btn-danger">Back</a>
+                    <!-- Button to users the building -->
+                    <button type="submit" class="btn btn-success">Update </button>
                 </div>
             </form>
 

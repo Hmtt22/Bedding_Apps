@@ -15,7 +15,7 @@ class SettingBedController extends Controller
 
      public function index()
      {
-         $settingBeds = SettingBed::with(['building', 'room', 'bed'])->get();
+         $settingBeds = SettingBed::with(['building', 'room', 'bed'])->paginate(10);
          return view('setting_bed.index', compact('settingBeds'));
      }
 

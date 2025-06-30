@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Building;
+use App\Models\SettingBed;
 use Illuminate\Http\Request;
 
 class BuildingController extends Controller
@@ -10,9 +11,7 @@ class BuildingController extends Controller
 
     public function index()
     {
-         // Mengambil semua data building dari database
-         $buildings = Building::all();
-
+        $buildings = Building::all();
          // Mengirim data ke view
          return view('building.index', compact('buildings'));
     }
@@ -62,6 +61,14 @@ class BuildingController extends Controller
     public function edit($id)
     {
         $building = Building::findOrFail($id); // Ambil data building berdasarkan ID
+
+        // Cek apakah building digunakan dalam SettingBed
+    $usedInSettingBed = SettingBed::where('building_id', $id)->exists();
+
+    if ($usedInSettingBed) {
+        return redirect()->back()->with('error', 'Data tidak bisa di-edit karena sudah dipakai di Setting Bed.');
+    }
+
         return view('building.edit', compact('building')); // Kirimkan data building ke view
     }
 
@@ -97,9 +104,15 @@ class BuildingController extends Controller
     {
         $building = Building::findOrFail($id); // Mencari building berdasarkan ID
 
+         // Cek apakah building digunakan dalam SettingBed
+    $usedInSettingBed = SettingBed::where('building_id', $id)->exists();
+
+    if ($usedInSettingBed) {
+        return redirect()->back()->with('error', 'Data tidak bisa dihapus karena sudah dipakai di Setting Bed.');
+    }
+
         // Hapus building
         $building->delete();
-
         // Redirect kembali ke halaman index dengan pesan sukses
         return redirect()->route('buildings.index')->with('success', 'Building deleted successfully!');
 

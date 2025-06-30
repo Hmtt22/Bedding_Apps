@@ -156,29 +156,29 @@
             @csrf
 
             <div class="mb-3">
-                <label for="name" class="form-label">Nama Gedung</label>
+                <label for="name" class="form-label">Building Name</label>
                 <input type="text" class="form-control" id="name" name="name" required>
             </div>
 
             <div class="mb-3">
-                <label for="location" class="form-label">Alamat</label>
+                <label for="location" class="form-label">Address</label>
                 <input type="text" class="form-control" id="address" name="address" required>
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">Deskripsi</label>
+                <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="floors" class="form-label">Jumlah Lantai</label>
+                <label for="floors" class="form-label">Floors</label>
                 <input type="number" class="form-control" id="jumlah_lantai" name="jumlah_lantai" required>
             </div>
 
             <!-- Buttons aligned to the right -->
             <div class="btn-container">
-                <a href="{{ route('buildings.index') }}" class="btn btn-danger">Kembali</a>
-                <button type="submit" class="btn btn-success">Create Building</button>
+                <a href="{{ route('buildings.index') }}" class="btn btn-danger">Back</a>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
 
         </form>

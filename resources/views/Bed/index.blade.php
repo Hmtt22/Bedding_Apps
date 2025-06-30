@@ -94,6 +94,10 @@
 <!-- [Template CSS Files] -->
 <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" >
 <link rel="stylesheet" href="../assets/css/style-preset.css" >
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>$('#myTable').DataTable();</script>
 
 </head>
 <!-- [Head] end -->
@@ -153,16 +157,28 @@
         </div>
     @endif
 
-  <div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Peringatan!</strong> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+    </div>
+    @endif
+
+    <div class="container">
+        <div class="card mt-5">
+            <h3 class="card-header p-3"></h3>
+            <div class="card-body">
+                <table id="myTable"class="display">
+                    <thead>
             <tr>
-                <th>No</th>
-                <th>Nama Bed</th>
-                <th>Deskripsi</th>
-                <th>created</th>
-                <th>update</th>
-                <th>Aksi</th>
+                <th>ID</th>
+                <th>Bed Name</th>
+                <th>Registrasi Number</th>
+                <th>Brand</th>
+                <th>Description</th>
+                <th>Created</th>
+                <th>Update</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -170,9 +186,12 @@
                 <tr>
                     <td>{{ $bed->formatted_id }}</td>
                     <td>{{ $bed->name }}</td>
+                    <td>{{ $bed->registrasi_number }}</td>
+                    <td>{{ $bed->brand }}</td>
                     <td>{{ $bed->description }}</td>
-                    <td>{{ $bed->created_at->format('M d, Y H:i') }}</td>
-                    <td>{{ $bed->updated_at->format('M d, Y H:i') }}</td>
+                    <td>{{ $bed->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+                    <td>{{ $bed->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+
                     <td>
                         <!-- Tombol Edit -->
                        <a href="{{ route('beds.edit', $bed->id) }}" class="btn btn-warning btn-sm edit-btn">
@@ -183,17 +202,19 @@
                        <form action="{{ route('beds.destroy', $bed->id) }}" method="POST" style="display: inline-block;">
                            @csrf
                            @method('DELETE')
-                           <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus gedung ini?')">
+                           <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data kasur ini?')">
                              <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
                            </button>
                        </form>
-
                    </td>
                     </tr>
             @endforeach
         </tbody>
-    </table>
-</div>
+                </table>
+
+            </div>
+        </div>
+    </div>
   <!-- [ Main Content ] end -->
 
   <footer class="pc-footer">
@@ -217,7 +238,25 @@
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
-
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    $('#myTable').DataTable({
+      language: {
+        search: "🔍 Search:",
+        lengthMenu: " _MENU_ entries per page",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        paginate: {
+          previous: "Previous",
+          next: "Next"
+        },
+        zeroRecords: "Not data found"
+      }
+    });
+  });
+</script>
 
 
 
@@ -242,6 +281,26 @@
 
 
 </body>
+<script>
+
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            confirmButtonColor: '#28a745'
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Peringatan !!',
+            text: '{{ session('error') }}',
+            confirmButtonColor: '#d33'
+        });
+    @endif
+</script>
 <!-- [Body] end -->
 
 </html>

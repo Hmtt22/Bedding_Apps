@@ -13,6 +13,8 @@ class Bed extends Model
 
     protected $fillable = [
         'name',
+        'registrasi_number',
+        'brand',
         'description'
 
     ];

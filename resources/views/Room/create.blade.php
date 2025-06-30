@@ -152,13 +152,19 @@
         <form action="{{ route('rooms.store') }}" method="POST" >
             @csrf
 
+            <div class="form-group mb-3">
+                <label for="room_number">Room Number</label>
+                <input type="text" name="room_number" class="form-control" value="{{ old('room_number') }}" required>
+            </div>
+
+
             <div class="mb-3">
-                <label for="name" class="form-label">Nama Room</label>
+                <label for="name" class="form-label">Room Name</label>
                 <input type="text" class="form-control" id="name" name="name" required>
             </div>
 
             <div class="mb-3">
-                <label for="description" class="form-label">Deskripsi</label>
+                <label for="description" class="form-label">Description</label>
                 <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
             </div>
 
@@ -169,8 +175,8 @@
 
             <!-- Buttons aligned to the right -->
             <div class="btn-container">
-                <a href="{{ route('rooms.index') }}" class="btn btn-danger">Kembali</a>
-                <button type="submit" class="btn btn-success">Create Room</button>
+                <a href="{{ route('rooms.index') }}" class="btn btn-danger">Back</a>
+                <button type="submit" class="btn btn-success">Submit</button>
             </div>
 
         </form>

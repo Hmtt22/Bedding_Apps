@@ -3,74 +3,6 @@
 <!-- [Head] start -->
 
 <head>
-    <style>
-        /* Gaya Tombol Hapus */
-.delete-btn {
-    display: inline-flex;
-    align-items: center;
-    background-color: #e74c3c; /* Warna merah untuk tombol hapus */
-    color: white;
-    font-size: 20px; /* Ukuran ikon lebih besar */
-    padding: 10px 16px; /* Padding agar tombol lebih besar */
-    border-radius: 50px; /* Membulatkan tombol */
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1); /* Bayangan lembut */
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-/* Gaya saat hover */
-.delete-btn:hover {
-    background-color: #c0392b; /* Warna lebih gelap saat hover */
-    transform: translateY(-4px); /* Efek terangkat saat hover */
-    box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.2); /* Bayangan lebih kuat */
-}
-
-/* Efek saat fokus */
-.delete-btn:focus {
-    outline: none;
-    box-shadow: 0 0 10px rgba(255, 87, 34, 0.8); /* Efek glow saat fokus */
-}
-
-/* Efek pada ikon */
-.delete-btn i {
-    margin-right: 8px; /* Memberikan jarak antara ikon dan batas tombol */
-    font-size: 22px; /* Ukuran ikon lebih besar agar lebih jelas */
-}
-
-/* Gaya Umum Tombol */
-.edit-btn {
-  display: inline-flex;
-  align-items: center;
-  background-color: #f39c12; /* Warna kuning terang */
-  color: white;
-  font-size: 18px;
-  padding: 12px 24px; /* Ukuran padding lebih besar untuk kenyamanan */
-  border-radius: 25px; /* Membulatkan tombol */
-  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2); /* Bayangan 3D */
-  text-decoration: none; /* Menghilangkan garis bawah */
-  transition: all 0.3s ease; /* Transisi saat hover */
-}
-
-/* Gaya saat hover */
-.edit-btn:hover {
-  background-color: #e67e22; /* Warna lebih gelap saat hover */
-  transform: translateY(-4px); /* Efek tombol terangkat */
-  box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.3); /* Bayangan lebih kuat */
-}
-
-/* Efek pada ikon */
-.edit-btn i {
-  margin-right: 8px; /* Memberikan jarak antara ikon */
-  font-size: 20px; /* Ukuran ikon */
-}
-
-/* Gaya saat fokus */
-.edit-btn:focus {
-  outline: none;
-  box-shadow: 0 0 10px rgba(255, 165, 0, 0.8); /* Efek glow saat fokus */
-}
-
-    </style>
   <title>Aplikasi RS</title>
   <!-- [Meta] -->
   <meta charset="utf-8">
@@ -94,6 +26,11 @@
 <!-- [Template CSS Files] -->
 <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" >
 <link rel="stylesheet" href="../assets/css/style-preset.css" >
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>$('#myTable').DataTable();</script>
+
 
 </head>
 <!-- [Head] end -->
@@ -127,7 +64,7 @@
           <div class="row align-items-center">
             <div class="col-md-12">
               <div class="page-header-title">
-                <h5 class="m-b-10">Create New Bed</h5>
+                <h5 class="m-b-10"> User Login</h5>
               </div>
               {{-- <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
@@ -142,46 +79,59 @@
 
   <!-- [ Main Content ] start -->
 
-    @if(session('success'))
+  <div class="mb-3">
+    <a href="{{ route('userlogins.create') }}" class="btn btn-primary">Create </a>
+  </div>
+
+  @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
 
-    <div class="card-body">
-        <form action="{{ route('beds.store') }}" method="POST" >
-            @csrf
+  <div class="container">
+    <div class="card mt-5">
+        <h3 class="card-header p-3"></h3>
+        <div class="card-body">
+            <table id="myTable"class="display">
+               <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Role</th>
+            <th>Action</th>
+        </tr>
+    </thead>
 
-            <div class="mb-3">
-                <label for="name" class="form-label">Bed Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
+    <tbody>
+        @foreach ($userLogins as $userLogin)
+            <tr>
+                <td>{{ ($userLogins->currentPage() - 1) * $userLogins->perPage() + $loop->iteration }}</td>
+                <td>{{ $userLogin->user->name }}</td>
+                <td>{{ $userLogin->role->role }}</td>
+                <td>
+                      <!-- Tombol Edit -->
+                   <a href="{{ route('userlogins.edit', $userLogin->id) }}" class="btn btn-warning btn-sm edit-btn">
+                    <i class="fas fa-pen"></i> <!-- Ikon Pena -->
+                  </a>
 
-            <div class="mb-3">
-                <label for="registrasi_number" class="form-label">Registrasi Number</label>
-                <input type="text" class="form-control" id="registrasi_number" name="registrasi_number" required>
-            </div>
+                     <!-- Tombol Hapus -->
+                   <form action="{{ route('userlogins.destroy', $userLogin->id) }}" method="POST" style="display: inline-block;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data pennguna ini?')">
+                      <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
+                    </button>
+                </form>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+            </table>
 
-            <div class="mb-3">
-                <label for="brand" class="form-label">Brand</label>
-                <input type="text" class="form-control" id="brand" name="brand" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
-            </div>
-
-            <!-- Buttons aligned to the right -->
-            <div class="btn-container">
-                <a href="{{ route('beds.index') }}" class="btn btn-danger">Back</a>
-                <button type="submit" class="btn btn-success">Submit</button>
-            </div>
-
-        </form>
+        </div>
     </div>
-
-
+</div>
   <!-- [ Main Content ] end -->
 
   <footer class="pc-footer">
@@ -205,6 +155,26 @@
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    $('#myTable').DataTable({
+      language: {
+        search: "🔍 Search:",
+        lengthMenu: " _MENU_ entries per page",
+        info: "Showing _START_ to _END_ for _TOTAL_ entries",
+        paginate: {
+          previous: "Previous",
+          next: "Next"
+        },
+        zeroRecords: "Not data found"
+      }
+    });
+  });
+</script>
+
 
 
 
@@ -230,6 +200,17 @@
 
 
 </body>
+<script>
+
+    @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#28a745'
+            });
+        @endif
+</script>
 <!-- [Body] end -->
 
 </html>

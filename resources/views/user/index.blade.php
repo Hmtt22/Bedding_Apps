@@ -26,6 +26,11 @@
 <!-- [Template CSS Files] -->
 <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" >
 <link rel="stylesheet" href="../assets/css/style-preset.css" >
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>$('#myTable').DataTable();</script>
+
 
 </head>
 <!-- [Head] end -->
@@ -78,51 +83,75 @@
     <a href="{{ route('users.create') }}" class="btn btn-primary">Create Akun</a>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Nama </th>
-                <th>Email</th>
-                <th>Nik</th>
-                <th>KTP </th>
-                <th>description</th>
-                <th>created</th>
-                <th>update</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($users as $user)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->nik }}</td>
-                    <td>{{ $user->ktp }}</td>
-                    <td>{{ $user->description }}</td>
-                    <td>{{ $user->created_at->format('M d, Y H:i') }}</td>
-                    <td>{{ $user->updated_at->format('M d, Y H:i') }}</td>
-                    <td>
-                          <!-- Tombol Edit -->
-                       <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm edit-btn">
-                        <i class="fas fa-pen"></i> <!-- Ikon Pena -->
-                      </a>
+   @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
 
-                         <!-- Tombol Hapus -->
-                       <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline-block;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus gedung ini?')">
-                          <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
-                        </button>
-                    </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+  @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Peringatan!</strong> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
+    </div>
+@endif
+
+  <div class="container">
+    <div class="card mt-5">
+        <h3 class="card-header p-3"></h3>
+        <div class="card-body">
+            <table id="myTable"class="display">
+               <thead>
+        <tr>
+            <th>ID</th>
+            <th>Account Name</th>
+            <th>Email</th>
+            <th>NIK</th>
+            <th>KTP Number</th>
+            <th>Description</th>
+            <th>Created</th>
+            <th>Update</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($users as $user)
+            <tr>
+                <td>{{ ($users->currentPage() - 1) * $users->perPage() + $loop->iteration }}</td>
+                <td>{{ $user->name }}</td>
+                <td>{{ $user->email }}</td>
+                <td>{{ $user->nik }}</td>
+                <td>{{ $user->ktp }}</td>
+                <td>{{ $user->description }}</td>
+                <td>{{ $user->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+                <td>{{ $user->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+
+                <td>
+                      <!-- Tombol Edit -->
+                   <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning btn-sm edit-btn">
+                    <i class="fas fa-pen"></i> <!-- Ikon Pena -->
+                  </a>
+
+                     <!-- Tombol Hapus -->
+                   <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display: inline-block;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data user ini?')">
+                      <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
+                    </button>
+                </form>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+            </table>
+                <!-- Pagination -->
+                    <div class="d-flex justify-content-end mt-3">
+                        {{ $users->links() }}
+                    </div>
+
+        </div>
+    </div>
 </div>
   <!-- [ Main Content ] end -->
 
@@ -147,7 +176,25 @@
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
-
+<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script>
+  $(document).ready(function() {
+    $('#myTable').DataTable({
+      language: {
+        search: "🔍 Search:",
+        lengthMenu: " _MENU_ entries per page",
+        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        paginate: {
+          previous: "Previous",
+          next: "Next"
+        },
+        zeroRecords: "Not data found"
+      }
+    });
+  });
+</script>
 
 
 
@@ -172,6 +219,26 @@
 
 
 </body>
+<script>
+
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: '{{ session('success') }}',
+            confirmButtonColor: '#28a745'
+        });
+    @endif
+
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Peringatan !!',
+            text: '{{ session('error') }}',
+            confirmButtonColor: '#d33'
+        });
+    @endif
+</script>
 <!-- [Body] end -->
 
 </html>

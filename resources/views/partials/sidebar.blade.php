@@ -17,6 +17,23 @@
           </li>
           <hr>
 
+          {{-- @if(auth()->check() && (auth()->user()->role === 'super_admin' || auth()->user()->role === 'user')) --}}
+          {{-- @if(auth()->user()->role === 'super_admin' || auth()->user()->role === 'user') --}}
+          <!-- Menu untuk user dan super admin -->
+          {{-- Menu khusus untuk USER --}}
+                {{-- @if(auth()->user()->role === 'user') --}}
+          <li class="pc-item pc-caption">
+            <label>Activity</label>
+            <i class="ti ti-news"></i>
+          </li>
+          <li class="pc-item">
+            <a href="/setting_beds" class="pc-link">
+              <span class="pc-micon"><i class="fas fa-cogs"></i></span>
+              <span class="pc-mtext">Setting Bed</span>
+            </a>
+          </li>
+          {{-- @endif --}}
+
           {{-- @if(Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin') --}}
           <!-- Menu untuk admin dan super admin -->
           <li class="pc-item pc-caption">
@@ -41,6 +58,12 @@
               <span class="pc-mtext">Bed</span>
             </a>
           </li>
+           <li class="pc-item">
+            <a href="/categories" class="pc-link">
+              <span class="pc-micon"><i class="ti ti-list"></i></span>
+              <span class="pc-mtext">Category</span>
+            </a>
+          </li>
           <hr>
 
           <li class="pc-item pc-caption">
@@ -62,7 +85,7 @@
           </li>
 
           <li class="pc-item">
-            <a href="/" class="pc-link">
+            <a href="/userlogins" class="pc-link">
               <span class="pc-micon"><i class="ti ti-users"></i></span>
               <span class="pc-mtext">User Login </span>
             </a>
@@ -70,19 +93,7 @@
 
           {{-- @endif --}}
 
-          {{-- @if(Auth::user()->role === 'user' || Auth::user()->role === 'super_admin') --}}
-          <!-- Menu untuk user dan super admin -->
-          <li class="pc-item pc-caption">
-            <label>Setting</label>
-            <i class="ti ti-news"></i>
-          </li>
-          <li class="pc-item">
-            <a href="/setting_beds" class="pc-link">
-              <span class="pc-micon"><i class="fas fa-cogs"></i></span>
-              <span class="pc-mtext">Setting Bed</span>
-            </a>
-          </li>
-          {{-- @endif --}}
+
         </ul>
 
       </div>

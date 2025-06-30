@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bed;
+use App\Models\SettingBed;
 use Illuminate\Http\Request;
 
 class BedController extends Controller
@@ -12,7 +13,7 @@ class BedController extends Controller
      */
     public function index()
     {
-        $beds = Bed::all(); // Ambil semua data bed
+        $beds = Bed::all();
         return view('bed.index', compact('beds'));
     }
 
@@ -30,14 +31,15 @@ class BedController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'description' => 'required',
+            'name' => 'required|string|max:255',
+            'registrasi_number' => 'required|string|max:255',
+            'brand' => 'required|string|max:255',
+            'description' => 'required|string',
         ]);
 
-        Bed::create($request->all());
+        Bed::create($request->only(['name', 'registrasi_number', 'brand', 'description']));
 
         return redirect()->route('beds.index')->with('success', 'Bed created successfully.');
-
     }
 
     /**
@@ -45,7 +47,9 @@ class BedController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // (Opsional) Tampilkan detail bed
+        $bed = Bed::findOrFail($id);
+        return view('bed.show', compact('bed'));
     }
 
     /**
@@ -53,8 +57,15 @@ class BedController extends Controller
      */
     public function edit($id)
     {
-        // Ambil data bed berdasarkan ID
-        $bed = Bed::findOrFail($id); // Ini akan melempar error 404 jika room tidak ditemukan
+        $bed = Bed::findOrFail($id);
+
+        // Cek apakah building digunakan dalam SettingBed
+    $usedInSettingBed = SettingBed::where('bed_id', $id)->exists();
+
+    if ($usedInSettingBed) {
+        return redirect()->back()->with('error', 'Data tidak bisa di-edit karena sudah dipakai di Setting Bed.');
+    }
+
         return view('bed.edit', compact('bed'));
     }
 
@@ -64,17 +75,16 @@ class BedController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
-            'description' => 'required',
+            'name' => 'required|string|max:255',
+            'registrasi_number' => 'required|string|max:255',
+            'brand' => 'required|string|max:255',
+            'description' => 'required|string',
         ]);
 
-        // Cari data bed berdasarkan ID
         $bed = Bed::findOrFail($id);
-
-        $bed->update($request->all());
+        $bed->update($request->only(['name', 'registrasi_number', 'brand', 'description']));
 
         return redirect()->route('beds.index')->with('success', 'Bed updated successfully.');
-
     }
 
     /**
@@ -82,10 +92,16 @@ class BedController extends Controller
      */
     public function destroy(string $id)
     {
-        $bed = Bed::findOrFail($id); // Mencari bed berdasarkan ID
-        // Menghapus bed berdasarkan ID
-        $bed->delete();
+        $bed = Bed::findOrFail($id);
 
+        // Cek apakah building digunakan dalam SettingBed
+    $usedInSettingBed = SettingBed::where('bed_id', $id)->exists();
+
+    if ($usedInSettingBed) {
+        return redirect()->back()->with('error', 'Data tidak bisa dihapus karena sudah dipakai di Setting Bed.');
+    }
+
+        $bed->delete();
         return redirect()->route('beds.index')->with('success', 'Bed deleted successfully.');
     }
 }

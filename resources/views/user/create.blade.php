@@ -79,7 +79,7 @@
         @csrf
 
         <div class="mb-3">
-            <label for="name" class="form-label">Nama Akun</label>
+            <label for="name" class="form-label">Account Name</label>
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
 
@@ -104,19 +104,19 @@
         </div>
 
         <div class="mb-3">
-            <label for="ktp" class="form-label">Nomor KTP</label>
+            <label for="ktp" class="form-label">KTP Number</label>
             <input type="text" class="form-control" id="ktp" name="ktp" required>
         </div>
 
         <div class="mb-3">
-            <label for="description" class="form-label">Deskripsi</label>
-            <textarea class="form-control" id="description" name="description" rows="3" placeholder="Masukkan deskripsi akun atau catatan tambahan..."></textarea>
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" ></textarea>
         </div>
 
 
         <div class="btn-container">
-            <a href="{{ route('users.index') }}" class="btn btn-danger">Kembali</a>
-            <button type="submit" class="btn btn-success">Tambah Akun</button>
+            <a href="{{ route('users.index') }}" class="btn btn-danger">Back</a>
+            <button type="submit" class="btn btn-success">Submit</button>
         </div>
 
     </form>

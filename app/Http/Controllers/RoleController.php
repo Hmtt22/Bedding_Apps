@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\UserLogin;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -36,6 +37,13 @@ class RoleController extends Controller
     public function edit($id)
     {
         $role = Role::findOrFail($id);
+
+        $usedInUserLogin = UserLogin::where('role_id', $id)->exists();
+
+    if ($usedInUserLogin) {
+        return redirect()->back()->with('error', 'Data tidak bisa di-edit karena sudah dipakai di User Login.');
+    }
+
         return view('role.edit', compact('role'));
     }
 
@@ -56,8 +64,16 @@ class RoleController extends Controller
     }
 
     public function destroy($id)
-    {
-        Role::findOrFail($id)->delete();
-        return redirect()->route('roles.index')->with('success', 'Role berhasil dihapus!');
+{
+    $usedInUserLogin = UserLogin::where('role_id', $id)->exists();
+
+    if ($usedInUserLogin) {
+        return redirect()->back()->with('error', 'Data tidak bisa dihapus karena sudah dipakai di User Login.');
     }
+
+    Role::findOrFail($id)->delete();
+
+    return redirect()->route('roles.index')->with('success', 'Role berhasil dihapus!');
+}
+
 }

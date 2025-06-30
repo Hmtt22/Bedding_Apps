@@ -3,64 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Building</title>
+    <title>Edit Category</title>
 
-    <!-- Link to Bootstrap CSS (local asset) -->
     <link rel="icon" href="{{ asset('assets/images/favicon.svg') }}" type="image/x-icon">
-
-    <!-- [Google Font] Family -->
     <link rel="stylesheet" href="{{ asset('https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap') }}" id="main-font-link">
-
-    <!-- [Tabler Icons] -->
     <link rel="stylesheet" href="{{ asset('assets/fonts/tabler-icons.min.css') }}">
-
-    <!-- [Feather Icons] -->
     <link rel="stylesheet" href="{{ asset('assets/fonts/feather.css') }}">
-
-    <!-- [Font Awesome Icons] -->
     <link rel="stylesheet" href="{{ asset('assets/fonts/fontawesome.css') }}">
-
-    <!-- [Material Icons] -->
     <link rel="stylesheet" href="{{ asset('assets/fonts/material.css') }}">
-
-    <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('assets/css/style-preset.css') }}">
 
     <style>
-        /* Gaya umum untuk konten */
         .main-content {
-            margin-left: 250px; /* Make space for sidebar */
+            margin-left: 250px;
             padding: 20px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Include Sidebar -->
     @include('partials.sidebar')
-
-    <!-- Include Navbar -->
     @include('partials.navbar')
 
     <div class="main-content">
         <div class="container mt-4">
             <div class="page-header">
                 <div class="page-block">
-                  <div class="row align-items-center">
-                    <div class="col-md-12">
-                      <div class="page-header-title">
-                        <h5 class="m-b-10">Edit Room</h5>
-                      </div>
-                      {{-- <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
-                        <li class="breadcr  umb-item" aria-current="page">Home</li>
-                      </ul> --}}
+                    <div class="row align-items-center">
+                        <div class="col-md-12">
+                            <div class="page-header-title">
+                                <h5 class="m-b-10">Edit Category</h5>
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
+            </div>
 
             @if(session('success'))
                 <div class="alert alert-success">
@@ -68,36 +46,50 @@
                 </div>
             @endif
 
-            <form action="{{ route('rooms.update', $room->id) }}" method="POST">
+
+            <form action="{{ route('categories.update', $category->id) }}" method="POST">
                 @csrf
-                @method('PUT') <!-- Menandakan bahwa ini adalah metode PUT untuk update -->
+                @method('PUT')
+
+                @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 
                 <div class="form-group mb-3">
-                    <label for="room_number">Room Number</label>
-                    <input type="text" name="room_number" class="form-control" value="{{ old('room_number', $room->room_number) }}" required>
+                    <label for="title">Title</label>
+                    <input type="text" name="title" id="title" class="form-control" value="{{ old('title', $category->title) }}" required>
                 </div>
 
-
-                <div class="mb-3">
-                    <label for="name" class="form-label">Room name</label>
-                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $room->name) }}" required>
+                <div class="form-group mb-3">
+                    <label for="type">Type</label>
+                    <input type="text" name="type" id="type" class="form-control" value="{{ old('type', $category->type) }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="4" required>{{ old('description', $room->description) }}</textarea>
+                    <textarea class="form-control" id="description" name="description" rows="4" required>{{ old('description', $category->description) }}</textarea>
                 </div>
 
-                <div class="mb-3">
-                    <label for="capacity" class="form-label">Capacity</label>
-                    <input type="number" class="form-control" id="capacity" name="capacity" value="{{ old('address', $room->capacity) }}" required>
+                <div class="form-group mb-3">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="form-control" required>
+                        <option value="">-- Select Status --</option>
+                        <option value="1" {{ old('status', $category->status) == 1 ? 'selected' : '' }}>Active</option>
+                        <option value="0" {{ old('status', $category->status) == 0 ? 'selected' : '' }}>Inactive</option>
+                    </select>
                 </div>
+
 
 
                 <div class="form-footer">
-                    <!-- Button to go back to the building index -->
-                    <a href="{{ route('rooms.index') }}" class="btn btn-danger">Back</a>
-                    <!-- Button to update the building -->
+                    <a href="{{ route('categories.index') }}" class="btn btn-danger">Back</a>
                     <button type="submit" class="btn btn-success">Update</button>
                 </div>
             </form>
@@ -105,11 +97,8 @@
         </div>
     </div>
 
-    <!-- Include Bootstrap JS (local assets) -->
     <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/dashboard-default.js') }}"></script>
-
-    <!-- Required Js -->
     <script src="{{ asset('assets/js/plugins/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/bootstrap.min.js') }}"></script>
@@ -119,21 +108,9 @@
 
     <script>
         layout_change('light');
-    </script>
-
-    <script>
         change_box_container('false');
-    </script>
-
-    <script>
         layout_rtl_change('false');
-    </script>
-
-    <script>
         preset_change("preset-1");
-    </script>
-
-    <script>
         font_change("Public-Sans");
     </script>
 

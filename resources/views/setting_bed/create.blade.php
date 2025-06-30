@@ -164,9 +164,9 @@
                 @csrf
 
                 <div class="form-group">
-                    <label for="building_id">Pilih Building:</label>
+                    <label for="building_id">Building Name</label>
                     <select name="building_id" id="building_id" class="form-control" required>
-                        <option value="">--Pilih Building--</option>
+                        <option value="">Choose a Building</option>
                         @foreach($buildings as $building)
                             <option value="{{ $building->id }}">{{ $building->name }}</option>
                         @endforeach
@@ -174,9 +174,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="room_id">Pilih Room:</label>
+                    <label for="room_id">Room Name</label>
                     <select name="room_id" id="room_id" class="form-control" required>
-                        <option value="">--Pilih Room--</option>
+                        <option value="">Choose a Room</option>
                         @foreach($rooms as $room)
                             <option value="{{ $room->id }}">{{ $room->name }}</option>
                         @endforeach
@@ -184,9 +184,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="bed_id">Pilih Bed:</label>
+                    <label for="bed_id">Bed Name</label>
                     <select name="bed_id" id="bed_id" class="form-control" required>
-                        <option value="">--Pilih Bed--</option>
+                        <option value="">Choose a Bed</option>
                         @foreach($beds as $bed)
                             <option value="{{ $bed->id }}">{{ $bed->name }}</option>
                         @endforeach
@@ -195,8 +195,8 @@
 
                 <!-- Buttons aligned to the right -->
                 <div class="btn-container">
-                    <a href="{{ route('setting_beds.index') }}" class="btn btn-danger">Kembali</a>
-                    <button type="submit" class="btn btn-success">Simpan Data</button>
+                    <a href="{{ route('setting_beds.index') }}" class="btn btn-danger">Back</a>
+                    <button type="submit" class="btn btn-success">Submit</button>
                 </div>
 
             </form>

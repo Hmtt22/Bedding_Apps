@@ -16,12 +16,12 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory()->create([
-            'name' => 'Rahmat Hidayat',
-            'email' => 'Rahmathidayat@gmail.com',
+            'name' => 'rahmat hidayat',
+            'email' => 'rahmathidayat@gmail.com',
             // 'role' => 'super_admin'
-            'nik' => '4617823',
-            'ktp' => '712738289',
-            'description' => 'jiosnsnsdusmd'
+            'nik' => '843203',
+            'ktp' => '4328973',
+            'description' => 'hdsafkdshoe'
 
         ]);
     }

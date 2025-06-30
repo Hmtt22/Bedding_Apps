@@ -94,10 +94,6 @@
 <!-- [Template CSS Files] -->
 <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" >
 <link rel="stylesheet" href="../assets/css/style-preset.css" >
-<link rel="stylesheet" href="https://cdn.datatables.net/2.3.2/css/dataTables.dataTables.css" />
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>$('#myTable').DataTable();</script>
 
 </head>
 <!-- [Head] end -->
@@ -131,7 +127,7 @@
           <div class="row align-items-center">
             <div class="col-md-12">
               <div class="page-header-title">
-                <h5 class="m-b-10">Room</h5>
+                <h5 class="m-b-10">Create New Categorie</h5>
               </div>
               {{-- <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
@@ -147,9 +143,7 @@
   <!-- [ Main Content ] start -->
 
   <!-- [ Create Building Button ] start -->
-<div class="mb-3">
-    <a href="{{ route('rooms.create') }}" class="btn btn-primary">Create Room</a>
-  </div>
+
   <!-- [ Create Building Button ] end -->
     @if(session('success'))
         <div class="alert alert-success">
@@ -157,65 +151,44 @@
         </div>
     @endif
 
-    @if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong>Peringatan!</strong> {{ session('error') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
-    </div>
-@endif
+    <div class="card-body">
+        <form action="{{ route('categories.store') }}" method="POST" >
+            @csrf
 
-    <div class="container">
-        <div class="card mt-5">
-            <h3 class="card-header p-3"></h3>
-            <div class="card-body">
-                <table id="myTable"class="display">
-                   <thead>
-            <tr>
-                <th>ID</th>
-                <th>Room Number</th> <!-- Menambahkan Room Number -->
-                <th>Room Name</th>
-                <th>Description</th>
-                <th>Capacity</th>
-                <th>Created</th>
-                <th>Update</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($rooms as $room)
-                <tr>
-                    <td>{{ $room->formatted_id }}</td>
-                    <td>{{ $room->room_number }}</td> <!-- Menampilkan Room Number -->
-                    <td>{{ $room->name }}</td>
-                    <td>{{ $room->description }}</td>
-                    <td>{{ $room->capacity }}</td>
-                    <td>{{ $room->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
-                    <td>{{ $room->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
-
-                    <td>
-                        <!-- Tombol Edit -->
-                       <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-warning btn-sm edit-btn">
-                         <i class="fas fa-pen"></i> <!-- Ikon Pena -->
-                       </a>
-
-                        <!-- Tombol Hapus -->
-                       <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline-block;">
-                           @csrf
-                           @method('DELETE')
-                           <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data ruangan ini?')">
-                             <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
-                           </button>
-                       </form>
-
-                   </td>
-                    </tr>
-            @endforeach
-        </tbody>
-                </table>
-
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
             </div>
+
+
+            <div class="mb-3">
+                <label for="type" class="form-label">Type</label>
+                <input type="text" class="form-control" id="type" name="type" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+            </div>
+
+             <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-control" id="status" name="status" required>
+                <option value="">-- Select Status --</option>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+            </select>
         </div>
+
+            <!-- Buttons aligned to the right -->
+            <div class="btn-container text-end">
+                <a href="{{ route('categories.index') }}" class="btn btn-danger">Back</a>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+
+        </form>
     </div>
+
   <!-- [ Main Content ] end -->
 
   <footer class="pc-footer">
@@ -239,26 +212,6 @@
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-  <script>
-  $(document).ready(function() {
-    $('#myTable').DataTable({
-      language: {
-        search: "🔍 Search:",
-        lengthMenu: " _MENU_ entries per page",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
-        paginate: {
-          previous: "Previous",
-          next: "Next"
-        },
-        zeroRecords: "No data found"
-      }
-    });
-  });
-</script>
-
 
 
 
@@ -284,26 +237,6 @@
 
 
 </body>
-<script>
-
-  @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: '{{ session('success') }}',
-            confirmButtonColor: '#28a745'
-        });
-    @endif
-
-    @if(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Peringatan !!',
-            text: '{{ session('error') }}',
-            confirmButtonColor: '#d33'
-        });
-    @endif
-</script>
 <!-- [Body] end -->
 
 </html>

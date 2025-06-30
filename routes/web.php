@@ -3,10 +3,11 @@
 use App\Http\Controllers\BedController;
 use App\Http\Controllers\BuildingController;
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
-use App\Http\Controllers\UserXRoleController;
+use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\SettingBedController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,12 @@ Route::middleware('auth')->group(function(){
     Route::put('/beds/{id}', [BedController::class, 'update'])->name('beds.update'); // Route untuk update data
     Route::delete('/beds/{id}', [BedController::class, 'destroy'])->name('beds.destroy');
 
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{id}/edit', [CategoryController::class, 'edit'])->name('categories.edit'); // Route untuk halaman edit
+    Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('categories.update'); // Route untuk update data
+    Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
@@ -61,6 +68,13 @@ Route::middleware('auth')->group(function(){
     Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit'); // Route untuk halaman edit
     Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update'); // Route untuk update data
     Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+    Route::get('/userlogins', [UserLoginController::class, 'index'])->name('userlogins.index');
+    Route::get('/userlogins/create', [UserLoginController::class, 'create'])->name('userlogins.create');
+    Route::post('/userlogins', [UserLoginController::class, 'store'])->name('userlogins.store');
+    Route::get('/userlogins/{id}/edit', [UserLoginController::class, 'edit'])->name('userlogins.edit'); // Route untuk halaman edit
+    Route::put('/userlogins/{id}', [UserLoginController::class, 'update'])->name('userlogins.update'); // Route untuk update data
+    Route::delete('/userlogins/{id}', [UserLoginController::class, 'destroy'])->name('userlogins.destroy');
 
 
     Route::get('/setting_beds', [SettingBedController::class, 'index'])->name('setting_beds.index');

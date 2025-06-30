@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserLogin;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::paginate(10); // tampilkan 10 akun per halaman
+
         return view('user.index', compact('users'));
     }
 
@@ -46,6 +48,14 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+
+        // Cek apakah user digunakan dalam SettingBed
+    $usedInUserLogin = UserLogin::where('user_id', $id)->exists();
+
+    if ($usedInUserLogin) {
+        return redirect()->back()->with('error', 'Data tidak bisa di-edit karena sudah dipakai di User Login.');
+    }
+
         return view('user.edit', compact('user'));
     }
 
@@ -78,8 +88,14 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->delete();
 
+        $usedInUserLogin = UserLogin::where('user_id', $id)->exists();
+
+    if ($usedInUserLogin) {
+        return redirect()->back()->with('error', 'Data tidak bisa dihapus karena sudah dipakai di User Login.');
+    }
+
+        $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully!');
     }
 }

@@ -99,6 +99,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>$('#myTable').DataTable();</script>
 
+
+
 </head>
 <!-- [Head] end -->
 <!-- [Body] Start -->
@@ -121,7 +123,6 @@
 <!-- [ Header ] end -->
 
 
-
   <!-- [ Main Content ] start -->
   <div class="pc-container">
     <div class="pc-content">
@@ -131,13 +132,8 @@
           <div class="row align-items-center">
             <div class="col-md-12">
               <div class="page-header-title">
-                <h5 class="m-b-10">Room</h5>
+                <h5 class="m-b-10">Categories</h5>
               </div>
-              {{-- <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="javascript: void(0)">Dashboard</a></li>
-                <li class="breadcr  umb-item" aria-current="page">Home</li>
-              </ul> --}}
             </div>
           </div>
         </div>
@@ -146,11 +142,11 @@
 
   <!-- [ Main Content ] start -->
 
-  <!-- [ Create Building Button ] start -->
+  <!-- [ Create Category Button ] start -->
 <div class="mb-3">
-    <a href="{{ route('rooms.create') }}" class="btn btn-primary">Create Room</a>
+    <a href="{{ route('categories.create') }}" class="btn btn-primary">Create Category</a>
   </div>
-  <!-- [ Create Building Button ] end -->
+  <!-- [ Create Category Button ] end -->
     @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -162,61 +158,65 @@
         <strong>Peringatan!</strong> {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
     </div>
-@endif
+    @endif
+
 
     <div class="container">
         <div class="card mt-5">
             <h3 class="card-header p-3"></h3>
             <div class="card-body">
                 <table id="myTable"class="display">
-                   <thead>
+                    <thead>
             <tr>
                 <th>ID</th>
-                <th>Room Number</th> <!-- Menambahkan Room Number -->
-                <th>Room Name</th>
+                <th>Title</th>
+                <th>Type</th>
                 <th>Description</th>
-                <th>Capacity</th>
+                <th>Status</th>
                 <th>Created</th>
-                <th>Update</th>
+                <th>Updated</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($rooms as $room)
+            @foreach($categories as $category)
                 <tr>
-                    <td>{{ $room->formatted_id }}</td>
-                    <td>{{ $room->room_number }}</td> <!-- Menampilkan Room Number -->
-                    <td>{{ $room->name }}</td>
-                    <td>{{ $room->description }}</td>
-                    <td>{{ $room->capacity }}</td>
-                    <td>{{ $room->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
-                    <td>{{ $room->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+                    <td>{{ $category->id }}</td>
+                    <td>{{ $category->title }}</td>
+                    <td>{{ $category->type }}</td>
+                    <td>{{ $category->description }}</td>
+                    <td>{{ $category->status == 1 ? 'Active' : 'Inactive' }}</td>
+                    <td>{{ $category->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+                    <td>{{ $category->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
 
                     <td>
-                        <!-- Tombol Edit -->
-                       <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-warning btn-sm edit-btn">
-                         <i class="fas fa-pen"></i> <!-- Ikon Pena -->
-                       </a>
+                         <!-- Tombol Edit -->
+                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm edit-btn">
+                          <i class="fas fa-pen"></i> <!-- Ikon Pena -->
+                        </a>
 
-                        <!-- Tombol Hapus -->
-                       <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline-block;">
-                           @csrf
-                           @method('DELETE')
-                           <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data ruangan ini?')">
-                             <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
-                           </button>
-                       </form>
+                         <!-- Tombol Hapus -->
+                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display: inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
+                              <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
+                            </button>
+                        </form>
 
-                   </td>
+
+                    </td>
                     </tr>
             @endforeach
         </tbody>
                 </table>
-
+                    <!-- Pagination -->
+                        <div class="d-flex justify-content-end mt-3">
+                            {{ $categories->links() }}
+                        </div>
             </div>
         </div>
-    </div>
-  <!-- [ Main Content ] end -->
+    </div> <!-- [ Main Content ] end -->
 
   <footer class="pc-footer">
     <div class="footer-wrapper container-fluid">
@@ -239,7 +239,7 @@
   <script src="../assets/js/fonts/custom-font.js"></script>
   <script src="../assets/js/pcoded.js"></script>
   <script src="../assets/js/plugins/feather.min.js"></script>
-<script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.3.2/js/dataTables.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
@@ -248,45 +248,32 @@
       language: {
         search: "🔍 Search:",
         lengthMenu: " _MENU_ entries per page",
-        info: "Showing _START_ to _END_ of _TOTAL_ entries",
+        info: "Showing _START_ to_END_ of _TOTAL_ entries",
         paginate: {
           previous: "Previous",
           next: "Next"
         },
-        zeroRecords: "No data found"
+        zeroRecords: "Not data found"
       }
     });
   });
 </script>
 
 
-
-
-
-
   <script>layout_change('light');</script>
-
-
-
 
   <script>change_box_container('false');</script>
 
-
-
   <script>layout_rtl_change('false');</script>
-
 
   <script>preset_change("preset-1");</script>
 
-
   <script>font_change("Public-Sans");</script>
-
-
 
 </body>
 <script>
 
-  @if(session('success'))
+    @if(session('success'))
         Swal.fire({
             icon: 'success',
             title: 'Berhasil!',
@@ -304,6 +291,7 @@
         });
     @endif
 </script>
+
 <!-- [Body] end -->
 
 </html>

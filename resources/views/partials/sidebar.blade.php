@@ -1,12 +1,12 @@
 <!-- [ Sidebar Menu ] start -->
 <nav class="pc-sidebar">
     <div class="navbar-wrapper">
-      <div class="m-header">
-        <a href="/" class="pc-link">
-          <!-- ========   Change your logo from here   ============ -->
-          <img src="{{ asset('assets/images/logo-dark.svg')}}" class="img-fluid logo-lg" alt="logo">
-        </a>
-      </div>
+      <div class="pc-mob-drp me-auto">
+            <a href="/" class="pc-link d-flex align-items-center">
+                <img src="{{ asset('assets/images/beddings_logo.png') }}?v={{ time() }}" class="img-fluid logo-lg" alt="Beddings Logo">
+
+            </a>
+        </div>
       <div class="navbar-content">
         <ul class="pc-navbar">
           <li class="pc-item">

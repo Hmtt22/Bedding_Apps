@@ -71,7 +71,7 @@
 }
 
     </style>
-  <title>Aplikasi RS</title>
+  <title>Bedding Apps</title>
   <!-- [Meta] -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -131,7 +131,12 @@
           <div class="row align-items-center">
             <div class="col-md-12">
               <div class="page-header-title">
-                <h5 class="m-b-10">Room</h5>
+                <div class="page-header-title">
+                    <ul class="breadcrumb" style="font-size: 22px; font-weight: 570; ">
+                        <li class="breadcrumb-item"><a href="{{ route('layouts.index') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Room</li>
+                    </ul>
+                </div>
               </div>
               {{-- <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="../dashboard/index.html">Home</a></li>
@@ -148,7 +153,6 @@
 
   <!-- [ Create Building Button ] start -->
 <div class="mb-3">
-    <a href="{{ route('rooms.create') }}" class="btn btn-primary">Create Room</a>
   </div>
   <!-- [ Create Building Button ] end -->
     @if(session('success'))
@@ -164,58 +168,137 @@
     </div>
 @endif
 
-    <div class="container">
-        <div class="card mt-5">
-            <h3 class="card-header p-3"></h3>
-            <div class="card-body">
-                <table id="myTable"class="display">
-                   <thead>
-            <tr>
-                <th>ID</th>
-                <th>Room Number</th> <!-- Menambahkan Room Number -->
-                <th>Room Name</th>
-                <th>Description</th>
-                <th>Capacity</th>
-                <th>Created</th>
-                <th>Update</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($rooms as $room)
-                <tr>
-                    <td>{{ $room->formatted_id }}</td>
-                    <td>{{ $room->room_number }}</td> <!-- Menampilkan Room Number -->
-                    <td>{{ $room->name }}</td>
-                    <td>{{ $room->description }}</td>
-                    <td>{{ $room->capacity }}</td>
-                    <td>{{ $room->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
-                    <td>{{ $room->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
-
-                    <td>
-                        <!-- Tombol Edit -->
-                       <a href="{{ route('rooms.edit', $room->id) }}" class="btn btn-warning btn-sm edit-btn">
-                         <i class="fas fa-pen"></i> <!-- Ikon Pena -->
-                       </a>
-
-                        <!-- Tombol Hapus -->
-                       <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline-block;">
-                           @csrf
-                           @method('DELETE')
-                           <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data ruangan ini?')">
-                             <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
-                           </button>
-                       </form>
-
-                   </td>
+   <!-- Tombol Create Room -->
+<div class="container">
+    <div class="card mt-5">
+        <div class="card-header p-3 d-flex justify-content-start">
+            {{-- <a href="{{ route('rooms.create') }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Create Room
+            </a> --}}
+            <button type="button" class="btn btn-primary mb-3"
+                data-bs-toggle="modal" data-bs-target="#createBuildingModal">
+                + Create New Bed
+            </button>
+        </div>
+        <div class="card-body">
+            <table id="myTable" class="display">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Room Number</th>
+                        <th>Room Name</th>
+                        <th>Description</th>
+                        <th>Capacity</th>
+                        <th>Created</th>
+                        <th>Update</th>
+                        <th>Action</th>
                     </tr>
-            @endforeach
-        </tbody>
-                </table>
+                </thead>
+                <tbody>
+                    @foreach($rooms as $room)
+                        <tr>
+                            <td>{{ $room->formatted_id }}</td>
+                            <td>{{ $room->room_number }}</td>
+                            <td>{{ $room->name }}</td>
+                            <td>{{ $room->description }}</td>
+                            <td>{{ $room->capacity }}</td>
+                            <td>{{ $room->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+                            <td>{{ $room->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+                            <td>
+                                <!-- Tombol Edit -->
+                                <a href="{{ route('rooms.edit', $room->id) }}" class="edit-btn"
+                                     style="background-color:#1cc88a;
+                                    color:white;
+                                    padding:6px 14px;
+                                    border-radius:20px;
+                                    text-decoration:none;
+                                    font-size:14px;
+                                    display:inline-block;
+                                    margin-right:5px;">
+                                    Edit</a>
 
-            </div>
+                                <!-- Tombol Hapus -->
+                                <form action="{{ route('rooms.destroy', $room->id) }}" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus data ruangan ini?')"
+                                    style="background-color:#e74a3b;
+                                    color:white;
+                                    padding:6px 14px;
+                                    border-radius:20px;
+                                    border:none;
+                                    font-size:14px;
+                                    cursor:pointer;">
+                                    Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
+</div>
+
+<!-- === MODAL CREATE BUILDING === -->
+            <div class="modal fade" id="createBuildingModal" tabindex="-1"
+                 aria-labelledby="createBuildingModalLabel" aria-hidden="true">
+
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="createBuildingModalLabel">Create New Room</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <form action="{{ route('rooms.store') }}" method="POST">
+                            @csrf
+
+                            <div class="modal-body">
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Room Number</label>
+                                    <input type="text" name="room_number" class="form-control"
+                                           placeholder="Enter room number" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Room Name</label>
+                                    <input type="text" name="name" class="form-control"
+                                           placeholder="Enter room name" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Description</label>
+                                    <textarea name="description" class="form-control" rows="4"
+                                              placeholder="Describe the room" required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Capacity</label>
+                                    <input type="number" name="capacity" class="form-control"
+                                           placeholder="Number of capacity" required>
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+
+                                <button type="submit" class="btn btn-primary">
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <!-- === END MODAL === -->
+
   <!-- [ Main Content ] end -->
 
   <footer class="pc-footer">

@@ -21,29 +21,23 @@ class UserController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // Validasi
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'nik' => 'required|string|max:20|unique:users,nik',
-            'ktp' => 'required|string|max:20|unique:users,ktp',
-            'description' => 'nullable|string',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+{
+    $validated = $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:6',
+        'nik' => 'required',
+        'ktp' => 'required',
+        'description' => 'nullable'
+    ]);
 
-        // Simpan user baru
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'nik' => $request->nik,
-            'ktp' => $request->ktp,
-            'description' => $request->description,
-            'password' => bcrypt($request->password),
-        ]);
+    $validated['password'] = bcrypt($validated['password']);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully!');
-    }
+    User::create($validated);
+
+    return redirect()->route('users.index')->with('success', 'Account created successfully!');
+}
+
 
     public function edit($id)
     {

@@ -11,13 +11,15 @@ class UserLoginController extends Controller
 {
     // Menampilkan daftar UserLogin
     public function index()
-    {
-        // dd(UserLogin::with('user', 'role')->get()->toArray());
+{
+    $users = User::all();  // Ambil semua user
+    $roles = Role::all();  // Ambil semua role
 
-        $userLogins = UserLogin::paginate(10); // tampilkan 10 akun per halaman
-        // dd($userLogins);
-        return view('userlogin.index', compact('userLogins'));
-    }
+    $userLogins = UserLogin::paginate(10);
+
+    return view('userlogin.index', compact('users', 'roles', 'userLogins'));
+}
+
 
     // Menampilkan form untuk membuat UserLogin baru
     public function create()

@@ -132,7 +132,12 @@
           <div class="row align-items-center">
             <div class="col-md-12">
               <div class="page-header-title">
-                <h5 class="m-b-10">Categories</h5>
+                <div class="page-header-title">
+                    <ul class="breadcrumb" style="font-size: 22px; font-weight: 570; ">
+                        <li class="breadcrumb-item"><a href="{{ route('layouts.index') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item" aria-current="page">Category</li>
+                    </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -144,7 +149,6 @@
 
   <!-- [ Create Category Button ] start -->
 <div class="mb-3">
-    <a href="{{ route('categories.create') }}" class="btn btn-primary">Create Category</a>
   </div>
   <!-- [ Create Category Button ] end -->
     @if(session('success'))
@@ -162,52 +166,86 @@
 
 
     <div class="container">
-        <div class="card mt-5">
-            <h3 class="card-header p-3"></h3>
-            <div class="card-body">
-                <table id="myTable"class="display">
-                    <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Type</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Updated</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($categories as $category)
-                <tr>
-                    <td>{{ $category->id }}</td>
-                    <td>{{ $category->title }}</td>
-                    <td>{{ $category->type }}</td>
-                    <td>{{ $category->description }}</td>
-                    <td>{{ $category->status == 1 ? 'Active' : 'Inactive' }}</td>
-                    <td>{{ $category->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
-                    <td>{{ $category->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+    <div class="card mt-5">
 
-                    <td>
-                         <!-- Tombol Edit -->
-                        <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning btn-sm edit-btn">
-                          <i class="fas fa-pen"></i> <!-- Ikon Pena -->
-                        </a>
+        <!-- Header Card berisi tombol Create -->
+        <div class="card-header p-3 d-flex justify-content-start">
+            {{-- <a href="{{ route('categories.create') }}" class="btn btn-sm btn-primary">
+                <i class="fas fa-plus"></i> Create Category
+            </a> --}}
+            <button type="button" class="btn btn-primary mb-3"
+                data-bs-toggle="modal" data-bs-target="#createBuildingModal">
+                + Create New Category
+            </button>
+        </div>
 
-                         <!-- Tombol Hapus -->
-                        <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display: inline-block;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
-                              <i class="fas fa-trash-alt"></i> <!-- Ikon Tempat Sampah -->
-                            </button>
-                        </form>
-
-
-                    </td>
+        <!-- Body Card berisi tabel -->
+        <div class="card-body">
+            <table id="myTable" class="display">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th>Action</th>
                     </tr>
-            @endforeach
+                </thead>
+                <tbody>
+                    @foreach($categories as $category)
+                        <tr>
+                            <td>{{ $category->id }}</td>
+                            <td>{{ $category->title }}</td>
+                            <td>{{ $category->type }}</td>
+                            <td>{{ $category->description }}</td>
+                            <td>{{ $category->status == 1 ? 'Active' : 'Inactive' }}</td>
+                            <td>{{ $category->created_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+                            <td>{{ $category->updated_at->setTimezone('Asia/Jakarta')->translatedFormat('l, d F Y, H:i') }}</td>
+                            <td>
+                                <!-- Tombol Edit -->
+                                <a href="{{ route('categories.edit', $category->id) }}" class="edit-btn"
+                                    style="background-color:#1cc88a;
+                                    color:white;
+                                    padding:6px 14px;
+                                    border-radius:20px;
+                                    text-decoration:none;
+                                    font-size:14px;
+                                    display:inline-block;
+                                    margin-right:5px;">
+                                    Edit</a>
+
+                                <!-- Tombol Hapus -->
+                                <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display: inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="delete-btn" onclick="return confirm('Apakah Anda yakin ingin menghapus bed ini?')"
+                                    style="background-color:#e74a3b;
+                                    color:white;
+                                    padding:6px 14px;
+                                    border-radius:20px;
+                                    border:none;
+                                    font-size:14px;
+                                    cursor:pointer;">
+                                    Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-end mt-3">
+                {{ $categories->links() }}
+            </div>
+        </div>
+    </div>
+</div>
+
         </tbody>
                 </table>
                     <!-- Pagination -->
@@ -217,6 +255,68 @@
             </div>
         </div>
     </div> <!-- [ Main Content ] end -->
+
+      <!-- === MODAL CREATE BUILDING === -->
+            <div class="modal fade" id="createBuildingModal" tabindex="-1"
+     aria-labelledby="createBuildingModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form action="{{ route('categories.store') }}" method="POST">
+                @csrf
+
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Title</label>
+                        <input type="text" name="title" class="form-control"
+                            placeholder="Enter category title" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Type</label>
+                        <input type="text" name="type" class="form-control"
+                            placeholder="Enter category type" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description</label>
+                        <textarea name="description" class="form-control" rows="4"
+                            placeholder="Describe the category"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status</label>
+                        <select name="status" class="form-select" required>
+                            <option value="">-- Choose Status --</option>
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Close</button>
+
+                    <button type="submit" class="btn btn-primary">
+                        Save
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+            <!-- === END MODAL === -->
 
   <footer class="pc-footer">
     <div class="footer-wrapper container-fluid">

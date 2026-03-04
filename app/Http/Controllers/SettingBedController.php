@@ -7,6 +7,7 @@ use App\Models\Building;
 use App\Models\Room;
 use App\Models\Bed;
 use Illuminate\Http\Request;
+use SebastianBergmann\CodeCoverage\Node\Builder;
 
 class SettingBedController extends Controller
 {
@@ -14,10 +15,15 @@ class SettingBedController extends Controller
      // Menampilkan daftar setting beds.
 
      public function index()
-     {
-         $settingBeds = SettingBed::with(['building', 'room', 'bed'])->paginate(10);
-         return view('setting_bed.index', compact('settingBeds'));
-     }
+{
+    $settingBeds = SettingBed::paginate(10);
+    $buildings = Building::all();
+    $rooms = Room::all();
+    $beds = Bed::all();
+
+    return view('setting_bed.index', compact('settingBeds', 'buildings', 'rooms', 'beds'));
+}
+
 
     /**
      * Menampilkan form untuk membuat setting bed.
